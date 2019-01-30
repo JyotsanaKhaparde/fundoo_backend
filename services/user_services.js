@@ -46,5 +46,18 @@ exports.forgetpassword = (data, callback) =>
     })
 }
 
+exports.getAllUser = (req,callback) => 
+{
+    userModel.getAllUser(req,(err, result) => 
+    {     
+        if (err) {     
+            callback(err);
+        } else {
+            callback(null, result);
+        }
+    })
+}
+
+
 
 

@@ -1,20 +1,14 @@
 let jwt = require('jsonwebtoken');
+//const express = require('express');
 
-exports.tokenValidate = (req,res,next) => {
-    var tokenresult = {};
-    var isTokenEmpty = req.headers['access-token'];
-    }
 
 let checkToken = (req, res, next) => {
-    let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
-    if (token.startsWith('Bearer ')) {
-        // Remove Bearer from string
-        token = token.slice(7, token.length);
-    }
-    if (token) {
-        jwt.verify(reg.token, 'secretkey', (err, decoded) => {
+    // Express headers are auto converted to lowercase
+    let getToken = req.headers.token || req.query.token || req.headers['x-access-token'];
+    if (getToken) {
+        jwt.verify(getToken, 'secretkey', (err, decoded) => {
             if (err) {
-                return res.json({
+                return res.send({
                     success: false,
                     message: 'Token is not valid'
                 });
@@ -24,20 +18,19 @@ let checkToken = (req, res, next) => {
             }
         });
     } else {
-        return res.json({
+        return res.send({
             success: false,
             message: 'Auth token is not supplied'
         });
     }
 };
 
+// let checkTokenForLogin = (req,res,next) => {
+
+// }
 module.exports = {
-    checkToken: checkToken
+    checkToken,
+    // checkTokenForLogin
 }
 
 
-// //verify token
-// function verifyToken(req, res, next) {
-//     //get auth hrader value
-//     const bearerHeader = req.headers[''];
-// }

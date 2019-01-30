@@ -23,6 +23,18 @@ const UserSchema = mongoose.Schema({
     password: {
         type: String
     },
+    confirmed: {
+        type: Boolean,
+        default: false
+    },
+    email_varification_token: {
+        type: String,
+        default: ''
+    },
+    forget_password_token: {
+        type: String,
+        default: ''
+    },
     createdOn: {
         type: Date,
         default: Date.now()
@@ -85,6 +97,13 @@ userModel.prototype.login = (data, callback) => {
         }
     });
 }
+
+//conformation for login
+// if (!user.confirmed) {
+//     throw new Error('Please confirm your email to login');
+// }
+
+
 userModel.prototype.forgetpassword = (callback) => {
     user.find({}, (err, result) => {
         if (err) {
@@ -95,4 +114,19 @@ userModel.prototype.forgetpassword = (callback) => {
         }
     });
 }
+
+userModel.prototype.getAllUser = (callback) => {
+    user.find({}, (err, result) => {
+        if (err) {
+            callback(err);
+        }
+        else {
+            callback(null, result);
+        }
+    });
+}
+
+
+
+
 module.exports = new userModel();

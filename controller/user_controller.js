@@ -10,6 +10,7 @@
 const userService = require('../services/user_services');
 const { check, validationResult } = require('express-validator/check');
 let jwt = require('jsonwebtoken');
+const sending_mail = require('../middleware/verifyEmail')
 exports.registration = (req, res) => {
     var responseResult = {};
     check('firstName', 'firstname cannot be empty').isEmpty();
@@ -37,9 +38,21 @@ exports.registration = (req, res) => {
             res.status(500).send(responseResult)
         }
         else {
-
             responseResult.success = true;
             responseResult.result = result;
+            //generate token in registration for emailverification
+            const payload = {
+                id: responseResult.result._id,
+                email: responseResult.result.email
+            }
+            const jwtToken = jwt.sign({ payload }, 'secretkey', { expiresIn: '24h' });
+            console.log("id: ", payload.id);
+
+            console.log('generated token :', jwtToken);
+            //console.log('object is: ', obj);
+            const url = `http://localhost:3000/verifyEmail/${jwtToken}`;
+            console.log(url);
+            sending_mail.sendEMailFunction(url);
             res.status(200).send(responseResult);
         }
     })
@@ -48,7 +61,6 @@ exports.login = (req, res, next) => {
     try {
         var responseResult = {};
         console.log('48 ---in user ctrl');
-
         check('email', 'username cannot be empty').isEmpty();
         check('email', 'username must be an email').isEmail();
         check('password', 'password cannot be empty').isEmpty();
@@ -72,6 +84,7 @@ exports.login = (req, res, next) => {
             else {
                 responseResult.success = true;
                 responseResult.result = result;
+                //generate token for login
                 const payload = {
                     id: responseResult.result._id,
                     email: responseResult.result.email
@@ -110,5 +123,19 @@ exports.forgetpassword = (req, res) => {
         }
     })
 }
-
+exports.getAllUser = (req, res) => {
+    var responseResult = {};
+    userService.getAllUser((err, result) => {
+        if (err) {
+            responseResult.success = false;
+            responseResult.error = err;
+            res.status(500).send(responseResult)
+        }
+        else {
+            responseResult.success = true;
+            responseResult.result = result;
+            res.status(200).send(responseResult);
+        }
+    })
+}
 

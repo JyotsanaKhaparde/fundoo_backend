@@ -7,11 +7,13 @@
  **********************************************************************************/
 const express = require('express');
 const router = express.Router();
-const loginAuth=require('../middleware/loginmiddleware')
+const loginAuth = require('../middleware/loginmiddleware')
 //Setting controller path into controller variables
 const userController = require('../controller/user_controller');
+const checkToken = require('../middleware/checkToken')
 // Using router.post() sending data to database
-router.post('/login',loginAuth.loginAuthentication, userController.login);
+router.post('/login', loginAuth.loginAuthentication, userController.login);
 router.post('/registration', userController.registration);
-router.post('/forgetpassword',userController.forgetpassword);
+router.post('/forgetpassword', userController.forgetpassword);
+router.get('/getAllUser', checkToken.checkToken, userController.getAllUser);
 module.exports = router;
