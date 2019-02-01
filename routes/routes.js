@@ -16,5 +16,6 @@ router.post('/login', loginAuth.loginAuthentication, userController.login);
 router.post('/registration', userController.registration);
  router.post('/forgetpassword', userController.forgetpassword);
  router.get('/getAllUser',userController.getAllUser);
-router.post('/verifyEmail/:token2',loginAuth.checkToken,userController.sendResponse)
+router.post('/verifyEmail/:token2',loginAuth.checkToken,userController.sendResponse);
+router.post('/verifyForgetPass/ForgetPassToken2',loginAuth.checkToken,userController.sendResponseForForgetPass)
 module.exports = router;

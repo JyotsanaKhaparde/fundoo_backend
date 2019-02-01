@@ -55,3 +55,13 @@ exports.redirect = (decoded, callback) => {
         }
     })
 }
+
+exports.redirectForForgetPass = (decoded, callback) => {
+    userModel.updateUserForForgetPass(decoded, (err, result) => {
+        if (err) {
+            callback(err);
+        } else {
+            callback(null, result);
+        }
+    })
+}

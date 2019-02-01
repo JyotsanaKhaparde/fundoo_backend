@@ -48,19 +48,10 @@ exports.registration = (req, res) => {
                 //email: responseResult.result.email
             }
             const jwtToken = utility.tokenGenerated(payload);
-            // const jwtToken = jwt.sign({ payload }, 'secretkey', { expiresIn: '24h' });
-            // console.log("id: ", payload.id);
-            // console.log('generated token :', jwtToken);
-            //console.log('object is: ', obj);
             const url = `http://localhost:3000/verifyEmail/${jwtToken.token}`;
-
-            // console.log("confirmed+++++++++++++",result.confirmed);
-
             console.log(url);
             //pass url in sendMailFunction & call middleware
             sending_mail.sendEMailFunction(url);
-            // return res.redirect('http://localhost:3000/login');
-            //res.status(200).send(url);
             res.status(200).send(url);
         }
     })
@@ -126,7 +117,17 @@ exports.forgetpassword = (req, res) => {
         else {
             responseResult.success = true;
             responseResult.result = result;
-            res.status(200).send(responseResult);
+            const payload = {
+                email: responseResult.result.email
+            }
+            const jwtTokenOfForgetPassword = utility.tokenGenerated(payload);
+            const url = `http://localhost:3000/verifyForgetPass/${jwtTokenOfForgetPassword.token}`;
+            console.log(url);
+            //pass url in sendMailFunction & call middleware
+
+            sending_mail.sendEMailFunction(url);
+            res.status(200).send(url);
+            // res.status(200).send(responseResult);
         }
     })
 }
@@ -145,7 +146,6 @@ exports.getAllUser = (req, res) => {
         }
     })
 }
-
 exports.sendResponse = (req, res) => {
     var responseResult = {};
     console.log('107---in user ctrl send token is verified response');
@@ -162,6 +162,23 @@ exports.sendResponse = (req, res) => {
             res.status(200).send(responseResult);
         }
     })
-
 }
+exports.sendResponseForForgetPass = (req, res) => {
+    var responseResult = {};
+    console.log('107---in user ctrl send token is verified response');
+    userService.redirectForForgetPass(req.decoded, (err, result) => {
+        if (err) {
+            responseResult.success = false;
+            responseResult.error = err;
+            res.status(500).send(responseResult)
+        }
+        else {
+            console.log('116---in user ctrl token is verified giving response');
+            responseResult.success = true;
+            responseResult.result = result;
+            res.status(200).send(responseResult);
+        }
+    })
+}
+
 

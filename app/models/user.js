@@ -98,7 +98,7 @@ userModel.prototype.login = (data, callback) => {
 }
 
 
-userModel.prototype.forgetpassword = (callback) => {
+userModel.prototype.forgetpassword = (data, callback) => {
     user.find({}, (err, result) => {
         if (err) {
             callback(err);
@@ -131,4 +131,14 @@ userModel.prototype.updateUser = (data, callback) => {
     });
 }
 
+userModel.prototype.updateUserForForgetPass = (data, callback) => {
+    user.updateOne({ _id: data.payload.id }, { password: data.password }, (err, result) => {
+        if (err) {
+            callback(err);
+        }
+        else {
+            callback(null, result);
+        }
+    });
+}
 module.exports = new userModel();
