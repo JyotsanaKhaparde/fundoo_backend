@@ -23,7 +23,7 @@ const UserSchema = mongoose.Schema({
     password: {
         type: String
     },
-    confirmed: {
+    is_confirmed: {
         type: Boolean,
         default: false
     },
@@ -63,7 +63,6 @@ userModel.prototype.registration = (data, callback) => {
                 data.password = bcrypt.hashSync(data.password, saltRounds);
                 var newData = new user(data);
                 newData.save((err, result) => {
-
                     if (err) {
                         callback(err);
                     }
@@ -98,11 +97,6 @@ userModel.prototype.login = (data, callback) => {
     });
 }
 
-//conformation for login
-// if (!user.confirmed) {
-//     throw new Error('Please confirm your email to login');
-// }
-
 
 userModel.prototype.forgetpassword = (callback) => {
     user.find({}, (err, result) => {
@@ -126,7 +120,15 @@ userModel.prototype.getAllUser = (callback) => {
     });
 }
 
-
-
+userModel.prototype.updateUser = (data, callback) => {
+    user.updateOne({ _id: data.payload.id }, { is_confirmed: true }, (err, result) => {
+        if (err) {
+            callback(err);
+        }
+        else {
+            callback(null, result);
+        }
+    });
+}
 
 module.exports = new userModel();

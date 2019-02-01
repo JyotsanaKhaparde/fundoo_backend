@@ -1,8 +1,6 @@
 let jwt = require('jsonwebtoken');
 //const express = require('express');
-
-
-let checkToken = (req, res, next) => {
+let checkToken1 = (req, res, next) => {
     // Express headers are auto converted to lowercase
     let getToken = req.headers.token || req.query.token || req.headers['x-access-token'];
     if (getToken) {
@@ -13,23 +11,25 @@ let checkToken = (req, res, next) => {
                     message: 'Token is not valid'
                 });
             } else {
+                console.log("re.decoded",decoded);
                 req.decoded = decoded;
+               
+                
                 next();
             }
         });
     } else {
         return res.send({
             success: false,
-            message: 'Auth token is not supplied'
+            message: 'Auth token is not supplied',
         });
     }
 };
-
 // let checkTokenForLogin = (req,res,next) => {
 
 // }
 module.exports = {
-    checkToken,
+    checkToken1,
     // checkTokenForLogin
 }
 

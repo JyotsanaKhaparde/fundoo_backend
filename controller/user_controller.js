@@ -7,13 +7,15 @@
  *  @version        : 1.0
  *  @since          : 28/01/2019
  **********************************************************************************/
+
 const userService = require('../services/user_services');
 const { check, validationResult } = require('express-validator/check');
 let jwt = require('jsonwebtoken');
-const sending_mail = require('../middleware/verifyEmail')
+const sending_mail = require('../middleware/sendingEmail')
+const utility = require('../Utility/utility');
 exports.registration = (req, res) => {
     var responseResult = {};
-    check('firstName', 'firstname cannot be empty').isEmpty();
+    check('firstName', 'firstname cannot be empty.....').isEmpty();
     check('firstName', 'firstname must contain only alphabets').isAlpha();
     check('lastName', 'lastname cannot be empty').isEmpty();
     check('lastName', 'lastname must contain only alphabets').isAlpha();
@@ -21,7 +23,6 @@ exports.registration = (req, res) => {
     check('email', 'username must be an email').isEmail();
     check('password', 'password cannot be empty').isEmpty();
     check('password', 'password must be atleast 8 characters long').isLength({ min: 8 });
-
     // Finds the validation errors in this request and wraps them in an object with handy functions
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -30,8 +31,9 @@ exports.registration = (req, res) => {
             message: err,
         });
     }
-
     userService.registration(req.body, (err, result) => {
+        console.log("request body", req.body);
+
         if (err) {
             responseResult.success = false;
             responseResult.error = err;
@@ -43,17 +45,23 @@ exports.registration = (req, res) => {
             //generate token in registration for emailverification
             const payload = {
                 id: responseResult.result._id,
-                email: responseResult.result.email
+                //email: responseResult.result.email
             }
-            const jwtToken = jwt.sign({ payload }, 'secretkey', { expiresIn: '24h' });
-            console.log("id: ", payload.id);
-
-            console.log('generated token :', jwtToken);
+            const jwtToken = utility.tokenGenerated(payload);
+            // const jwtToken = jwt.sign({ payload }, 'secretkey', { expiresIn: '24h' });
+            // console.log("id: ", payload.id);
+            // console.log('generated token :', jwtToken);
             //console.log('object is: ', obj);
-            const url = `http://localhost:3000/verifyEmail/${jwtToken}`;
+            const url = `http://localhost:3000/verifyEmail/${jwtToken.token}`;
+
+            // console.log("confirmed+++++++++++++",result.confirmed);
+
             console.log(url);
+            //pass url in sendMailFunction & call middleware
             sending_mail.sendEMailFunction(url);
-            res.status(200).send(responseResult);
+            // return res.redirect('http://localhost:3000/login');
+            //res.status(200).send(url);
+            res.status(200).send(url);
         }
     })
 }
@@ -65,7 +73,6 @@ exports.login = (req, res, next) => {
         check('email', 'username must be an email').isEmail();
         check('password', 'password cannot be empty').isEmpty();
         check('password', 'password must be atleast 8 characters long').isLength({ min: 8 });
-
         // Finds the validation errors in this request and wraps them in an object with handy functions
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -137,5 +144,24 @@ exports.getAllUser = (req, res) => {
             res.status(200).send(responseResult);
         }
     })
+}
+
+exports.sendResponse = (req, res) => {
+    var responseResult = {};
+    console.log('107---in user ctrl send token is verified response');
+    userService.redirect(req.decoded, (err, result) => {
+        if (err) {
+            responseResult.success = false;
+            responseResult.error = err;
+            res.status(500).send(responseResult)
+        }
+        else {
+            console.log('116---in user ctrl token is verified giving response');
+            responseResult.success = true;
+            responseResult.result = result;
+            res.status(200).send(responseResult);
+        }
+    })
+
 }
 

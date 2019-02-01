@@ -7,57 +7,51 @@
  *  @since          : 28/01/2019
  **********************************************************************************/
 const userModel = require('../app/models/user');
-exports.registration = (data, callback) => 
-{
-    userModel.registration(data, (err, result) => 
-    {
-        if (err) 
-        {
+exports.registration = (data, callback) => {
+    userModel.registration(data, (err, result) => {
+        if (err) {
             callback(err)
-        } 
-        else 
-        {
+        }
+        else {
             callback(null, result);
         }
     })
 }
-exports.login = (data, callback) => 
-{
+exports.login = (data, callback) => {
     console.log('26 ---in user services');
-    userModel.login(data, (err, result) => 
-    {     
-        if (err) {     
+    userModel.login(data, (err, result) => {
+        if (err) {
             callback(err);
         } else {
             callback(null, result);
         }
     })
 }
-exports.forgetpassword = (data, callback) => 
-{
+exports.forgetpassword = (data, callback) => {
     console.log('26 ---in user services');
-    userModel.forgetpassword(data, (err, result) => 
-    {     
-        if (err) {     
+    userModel.forgetpassword(data, (err, result) => {
+        if (err) {
             callback(err);
         } else {
             callback(null, result);
         }
     })
 }
-
-exports.getAllUser = (req,callback) => 
-{
-    userModel.getAllUser(req,(err, result) => 
-    {     
-        if (err) {     
+exports.getAllUser = (req, callback) => {
+    userModel.getAllUser(req, (err, result) => {
+        if (err) {
             callback(err);
         } else {
             callback(null, result);
         }
     })
 }
-
-
-
-
+exports.redirect = (decoded, callback) => {
+    userModel.updateUser(decoded, (err, result) => {
+        if (err) {
+            callback(err);
+        } else {
+            callback(null, result);
+        }
+    })
+}

@@ -18,11 +18,14 @@ exports.sendEMailFunction = (url) => {
         subject: 'Subject of your email', // Subject line
         text: url
     };
+    /** Sends an email using the preselected transport object */
     transporter.sendMail(mailOptions, function (err, info) {
+        //send error
         if (err)
             console.log(err)
         else
-            console.log(info);
+            //send message information
+            console.log("28---sendingEmail.js---BE: ",info);
     });
 }
 
