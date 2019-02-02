@@ -15,18 +15,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 //it will match any path that begins with '/'
 app.use('/', router);
-
-//added
-// app.get('/verifyEmail/:token', async (req, res) => {
-//     try {
-//         const { user: { id } } = jwt.verify(req.params.token, "secretkey");
-//         await userModel.update({ confirmed: true }, { where: { id } });
-//     } catch (e) {
-//         res.send('error');
-//     }
-//     return res.redirect('http://localhost:3000/login');
-// });
-
 // Configuring the database(legacy code)
 mongoose.Promise = global.Promise;
 // Connecting to the database

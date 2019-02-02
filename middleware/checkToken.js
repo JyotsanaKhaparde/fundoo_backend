@@ -25,12 +25,8 @@ let checkToken1 = (req, res, next) => {
         });
     }
 };
-// let checkTokenForLogin = (req,res,next) => {
-
-// }
 module.exports = {
     checkToken1,
-    // checkTokenForLogin
 }
 
 

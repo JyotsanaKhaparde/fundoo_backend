@@ -25,7 +25,7 @@ exports.sendEMailFunction = (url) => {
             console.log(err)
         else
             //send message information
-            console.log("28---sendingEmail.js---BE: ",info);
+            console.log("28---sendingEmail.js---BE: ", info);
     });
 }
 

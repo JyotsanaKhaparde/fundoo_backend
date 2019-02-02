@@ -18,7 +18,7 @@ exports.registration = (data, callback) => {
     })
 }
 exports.login = (data, callback) => {
-    console.log('26 ---in user services');
+    console.log('21 ---in user services');
     userModel.login(data, (err, result) => {
         if (err) {
             callback(err);
@@ -28,7 +28,7 @@ exports.login = (data, callback) => {
     })
 }
 exports.forgetpassword = (data, callback) => {
-    console.log('26 ---in user services');
+    console.log('31 ---in user services');
     userModel.forgetpassword(data, (err, result) => {
         if (err) {
             callback(err);
@@ -55,9 +55,8 @@ exports.redirect = (decoded, callback) => {
         }
     })
 }
-
-exports.redirectForForgetPass = (decoded, callback) => {
-    userModel.updateUserForForgetPass(decoded, (err, result) => {
+exports.redirectForForgetPass = (req, callback) => {
+    userModel.updateUserForForgetPass(req, (err, result) => {
         if (err) {
             callback(err);
         } else {

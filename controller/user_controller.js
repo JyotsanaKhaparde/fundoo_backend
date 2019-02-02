@@ -33,7 +33,6 @@ exports.registration = (req, res) => {
     }
     userService.registration(req.body, (err, result) => {
         console.log("request body", req.body);
-
         if (err) {
             responseResult.success = false;
             responseResult.error = err;
@@ -108,6 +107,7 @@ exports.login = (req, res, next) => {
 exports.forgetpassword = (req, res) => {
     responseResult = {},
         console.log('78---in user ctrl');
+    console.log('111---in userController---req body : ', req.body);
     userService.forgetpassword(req.body, (err, result) => {
         if (err) {
             responseResult.success = false;
@@ -118,13 +118,14 @@ exports.forgetpassword = (req, res) => {
             responseResult.success = true;
             responseResult.result = result;
             const payload = {
-                email: responseResult.result.email
+                user_id: responseResult.result._id
+                //email: responseResult.result.email
             }
+            console.log('130--userctrl-- Payload is---', payload);
             const jwtTokenOfForgetPassword = utility.tokenGenerated(payload);
-            const url = `http://localhost:3000/verifyForgetPass/${jwtTokenOfForgetPassword.token}`;
+            const url = `http://localhost:3000/resetPassword/${jwtTokenOfForgetPassword.token}`;
             console.log(url);
             //pass url in sendMailFunction & call middleware
-
             sending_mail.sendEMailFunction(url);
             res.status(200).send(url);
             // res.status(200).send(responseResult);
@@ -166,7 +167,7 @@ exports.sendResponse = (req, res) => {
 exports.sendResponseForForgetPass = (req, res) => {
     var responseResult = {};
     console.log('107---in user ctrl send token is verified response');
-    userService.redirectForForgetPass(req.decoded, (err, result) => {
+    userService.redirectForForgetPass(req, (err, result) => {
         if (err) {
             responseResult.success = false;
             responseResult.error = err;
