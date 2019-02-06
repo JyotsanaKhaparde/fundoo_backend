@@ -30,6 +30,7 @@ const UserSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
+    //timestamps: true
     createdOn: {
         type: Date,
         default: Date.now()
@@ -38,6 +39,8 @@ const UserSchema = mongoose.Schema({
         type: Date,
         default: Date.now()
     }
+    
+    
 });
 var user = mongoose.model('User', UserSchema);
 function userModel() {
