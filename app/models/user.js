@@ -74,7 +74,7 @@ userModel.prototype.registration = (data, callback) => {
 }
 //Finding user into database using the findOne()
 userModel.prototype.login = (data, callback) => {
-    console.log('72 ---in user model');
+   // console.log('72 ---in user model');
     user.findOne({ "email": data.email }, (err, result) => {
         if (err) {
             callback(err);

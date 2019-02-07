@@ -18,7 +18,7 @@ exports.registration = (data, callback) => {
     })
 }
 exports.login = (data, callback) => {
-    console.log('21 ---in user services');
+   // console.log('21 ---in user services');
     userModel.login(data, (err, result) => {
         if (err) {
             callback(err);

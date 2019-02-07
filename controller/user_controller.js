@@ -48,7 +48,7 @@ exports.registration = (req, res) => {
             }
             const jwtToken = utility.tokenGenerated(payload);
             const url = `http://localhost:3000/verifyEmail/${jwtToken.token}`;
-            console.log(url);
+           // console.log(url);
             //pass url in sendMailFunction & call middleware
             sending_mail.sendEMailFunction(url);
             res.status(200).send(url);
@@ -87,15 +87,15 @@ exports.login = (req, res, next) => {
                     email: responseResult.result.email
                 }
                 const jwtToken = jwt.sign({ payload }, 'secretkey', { expiresIn: '24h' });
-                console.log("username : ", payload.email);
-                console.log("id: ", payload.id);
+               // console.log("username : ", payload.email);
+               // console.log("id: ", payload.id);
                 const obj = {
                     success: true,
                     message: 'Authentication successful!',
                     token: jwtToken
                 }
-                console.log('generated token :', jwtToken);
-                console.log('object is: ', obj);
+               // console.log('generated token :', jwtToken);
+               // console.log('object is: ', obj);
                 res.status(200).send(obj);
             }
         })
